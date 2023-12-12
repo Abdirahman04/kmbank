@@ -1,14 +1,13 @@
 package com.abdirahman.kmbank.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "users")
 public class User {
+    private long id;
     private String accountNumber;
     private String firstName;
     private String lastName;
@@ -28,6 +27,18 @@ public class User {
         this.email = email;
         this.password = password;
         this.balance = balance;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence")
+    @Column(name = "id", nullable = false)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     @Column(name = "account_number", nullable = false)

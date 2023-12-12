@@ -12,7 +12,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public void addUser(User user) {
+        userRepository.save(user);
+    }
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
+    }
+
+    public String hello() {
+        return "hello";
     }
 }
