@@ -3,6 +3,7 @@ package com.abdirahman.kmbank.model;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -16,7 +17,21 @@ public class User {
     private String password;
     private Double balance;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<BasicTransaction> transactions;
+
     public User() {
+    }
+
+    public User(long id, String accountNumber, String firstName, String lastName, Date dob, String email, String password, Double balance) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.email = email;
+        this.password = password;
+        this.balance = balance;
     }
 
     public User(String accountNumber, String firstName, String lastName, Date dob, String email, String password, Double balance) {
@@ -102,6 +117,14 @@ public class User {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public List<BasicTransaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<BasicTransaction> transactions) {
+        this.transactions = transactions;
     }
 
     @Override
