@@ -28,7 +28,7 @@ public class KmbankController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         User user = userService.findById(id);
         if (user == null) {
@@ -39,6 +39,16 @@ public class KmbankController {
     @PostMapping("/user")
     public void addUser(@RequestBody User user) {
         userService.addUser(user);
+    }
+
+    @PutMapping("/user/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+
+        User updatedUser = userService.updateUser(id, user);
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedUser);
     }
 
     @GetMapping("/hello")
