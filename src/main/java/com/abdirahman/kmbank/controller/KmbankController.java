@@ -51,6 +51,13 @@ public class KmbankController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @DeleteMapping("/user/{id}")
+
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/hello")
     @ResponseBody
     public String hello() {

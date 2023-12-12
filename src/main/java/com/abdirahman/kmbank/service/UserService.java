@@ -4,10 +4,12 @@ import com.abdirahman.kmbank.model.User;
 import com.abdirahman.kmbank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -39,6 +41,10 @@ public class UserService {
         existingUser.setBalance(user.getBalance());
 
         return userRepository.save(existingUser);
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     public String hello() {
