@@ -5,9 +5,17 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "basicTransactions")
 public class BasicTransaction {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence")
+    @Column(name = "id", nullable = false)
     private Long id;
+    @Column(nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Long userId;
+    @Column(name = "transaction_type", nullable = false)
     private String transactionType;
+    @Column(name = "balance", nullable = false)
     private Double balance;
 
     public BasicTransaction() {
@@ -26,10 +34,6 @@ public class BasicTransaction {
         this.balance = balance;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
-    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence")
-    @Column(name = "id", nullable = false)
     public Long getId() {
         return id;
     }
@@ -38,8 +42,6 @@ public class BasicTransaction {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
     public Long getUserId() {
         return userId;
     }
@@ -48,7 +50,6 @@ public class BasicTransaction {
         this.userId = userId;
     }
 
-    @Column(name = "transaction_type", nullable = false)
     public String getTransactionType() {
         return transactionType;
     }
@@ -57,7 +58,6 @@ public class BasicTransaction {
         this.transactionType = transactionType;
     }
 
-    @Column(name = "balance", nullable = false)
     public double getBalance() {
         return balance;
     }

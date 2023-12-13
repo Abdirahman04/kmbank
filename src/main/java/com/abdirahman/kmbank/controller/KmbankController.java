@@ -1,19 +1,25 @@
 package com.abdirahman.kmbank.controller;
 
 import com.abdirahman.kmbank.model.User;
+import com.abdirahman.kmbank.service.BasicTransactionService;
 import com.abdirahman.kmbank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
 public class KmbankController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BasicTransactionService basicTransactionService;
 
     public KmbankController(UserService userService) {
         this.userService = userService;
@@ -52,10 +58,19 @@ public class KmbankController {
     }
 
     @DeleteMapping("/user/{id}")
-
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/deposit")
+    public ResponseEntity<?> deposit(@RequestBody Map<String,Object> body) {
+        Long id = Long.valueOf((Integer)body.get("id"));
+        Double balance = Double.valueOf((Integer)body.get("balance"));
+
+        basicTransactionService.deposit(id,balance);
+
+        return  ResponseEntity.noContent().build();
     }
 
     @GetMapping("/hello")

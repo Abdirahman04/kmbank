@@ -8,16 +8,27 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
+    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence")
+    @Column(name = "id", nullable = false)
     private long id;
+    @Column(name = "account_number", nullable = false)
     private String accountNumber;
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(name = "date_of_birth", nullable = false)
     private Date dob;
+    @Column(name = "email", nullable = false)
     private String email;
+    @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "balance", nullable = false)
     private Double balance;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<BasicTransaction> transactions;
 
     public User() {
@@ -44,10 +55,6 @@ public class User {
         this.balance = balance;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_sequence_generator")
-    @SequenceGenerator(name = "user_sequence_generator", sequenceName = "user_sequence")
-    @Column(name = "id", nullable = false)
     public long getId() {
         return id;
     }
@@ -56,7 +63,6 @@ public class User {
         this.id = id;
     }
 
-    @Column(name = "account_number", nullable = false)
     public String getAccountNumber() {
         return accountNumber;
     }
@@ -65,7 +71,6 @@ public class User {
         this.accountNumber = accountNumber;
     }
 
-    @Column(name = "first_name", nullable = false)
     public String getFirstName() {
         return firstName;
     }
@@ -74,7 +79,6 @@ public class User {
         this.firstName = firstName;
     }
 
-    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return lastName;
     }
@@ -83,7 +87,6 @@ public class User {
         this.lastName = lastName;
     }
 
-    @Column(name = "date_of_birth", nullable = false)
     public Date getDob() {
         return dob;
     }
@@ -92,7 +95,6 @@ public class User {
         this.dob = dob;
     }
 
-    @Column(name = "email", nullable = false)
     public String getEmail() {
         return email;
     }
@@ -101,7 +103,6 @@ public class User {
         this.email = email;
     }
 
-    @Column(name = "password", nullable = false)
     public String getPassword() {
         return password;
     }
@@ -110,7 +111,6 @@ public class User {
         this.password = password;
     }
 
-    @Column(name = "balance", nullable = false)
     public Double getBalance() {
         return balance;
     }
