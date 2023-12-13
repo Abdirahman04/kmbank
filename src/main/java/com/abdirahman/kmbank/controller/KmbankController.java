@@ -1,5 +1,6 @@
 package com.abdirahman.kmbank.controller;
 
+import com.abdirahman.kmbank.model.BasicTransaction;
 import com.abdirahman.kmbank.model.User;
 import com.abdirahman.kmbank.service.BasicTransactionService;
 import com.abdirahman.kmbank.service.UserService;
@@ -71,6 +72,15 @@ public class KmbankController {
         basicTransactionService.deposit(id,balance);
 
         return  ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/basicTransaction")
+    public ResponseEntity<List<BasicTransaction>> getAllTransactions() {
+        List<BasicTransaction> basicTransactions = basicTransactionService.getAllTransactions();
+        if (basicTransactions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(basicTransactions);
     }
 
     @GetMapping("/hello")
