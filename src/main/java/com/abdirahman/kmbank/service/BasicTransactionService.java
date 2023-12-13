@@ -28,6 +28,17 @@ public class BasicTransactionService {
         userRepository.save(thisUser);
     }
 
+    public void withdraw(Long id, Double balance) {
+        var thisUser = userRepository.findById(id);
+        if (thisUser.getBalance() >= balance) {
+            var transaction = new BasicTransaction(id, "withdrawal", balance);
+            thisUser.setBalance(thisUser.getBalance() - balance);
+
+            basicTransactionRepository.save(transaction);
+            userRepository.save(thisUser);
+        }
+    }
+
     public List<BasicTransaction> getAllTransactions() {
         return basicTransactionRepository.findAll();
     }

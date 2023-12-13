@@ -31,6 +31,12 @@ public class User {
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<BasicTransaction> transactions;
 
+    @OneToMany(mappedBy = "senderId", cascade = CascadeType.ALL)
+    private List<TransferTransaction> senderTransferTransactions;
+
+    @OneToMany(mappedBy = "recipientId", cascade = CascadeType.ALL)
+    private List<TransferTransaction> recipientTransferTransactions;
+
     public User() {
     }
 
@@ -125,6 +131,22 @@ public class User {
 
     public void setTransactions(List<BasicTransaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public List<TransferTransaction> getSenderTransferTransactions() {
+        return senderTransferTransactions;
+    }
+
+    public void setSenderTransferTransactions(List<TransferTransaction> senderTransferTransactions) {
+        this.senderTransferTransactions = senderTransferTransactions;
+    }
+
+    public List<TransferTransaction> getRecipientTransferTransactions() {
+        return recipientTransferTransactions;
+    }
+
+    public void setRecipientTransferTransactions(List<TransferTransaction> recipientTransferTransactions) {
+        this.recipientTransferTransactions = recipientTransferTransactions;
     }
 
     @Override

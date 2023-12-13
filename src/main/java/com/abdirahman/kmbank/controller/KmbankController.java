@@ -74,6 +74,16 @@ public class KmbankController {
         return  ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/withdraw")
+    public ResponseEntity<?> withdraw(@RequestBody Map<String,Object> body) {
+        Long id = Long.valueOf((Integer)body.get("id"));
+        Double balance = Double.valueOf((Integer)body.get("balance"));
+
+        basicTransactionService.withdraw(id,balance);
+
+        return  ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/basicTransaction")
     public ResponseEntity<List<BasicTransaction>> getAllTransactions() {
         List<BasicTransaction> basicTransactions = basicTransactionService.getAllTransactions();
