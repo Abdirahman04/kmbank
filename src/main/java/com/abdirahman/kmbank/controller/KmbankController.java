@@ -1,8 +1,10 @@
 package com.abdirahman.kmbank.controller;
 
 import com.abdirahman.kmbank.model.BasicTransaction;
+import com.abdirahman.kmbank.model.TransferTransaction;
 import com.abdirahman.kmbank.model.User;
 import com.abdirahman.kmbank.service.BasicTransactionService;
+import com.abdirahman.kmbank.service.TransferTransactionService;
 import com.abdirahman.kmbank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,9 @@ public class KmbankController {
 
     @Autowired
     private BasicTransactionService basicTransactionService;
+
+    @Autowired
+    private TransferTransactionService transferTransactionService;
 
     public KmbankController(UserService userService) {
         this.userService = userService;
@@ -91,6 +96,21 @@ public class KmbankController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(basicTransactions);
+    }
+
+    @GetMapping("/transferTransaction")
+    public ResponseEntity<List<TransferTransaction>> getAllTransferTransactions() {
+        List<TransferTransaction> transferTransactions = transferTransactionService.getAllTransferTransactions();
+        if (transferTransactions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(transferTransactions);
+    }
+
+    @PostMapping("/send")
+    public ResponseEntity<?> send(@RequestBody TransferTransaction transfer) {
+        transferTransactionService.send(transfer);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/hello")
