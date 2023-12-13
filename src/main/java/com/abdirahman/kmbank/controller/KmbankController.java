@@ -47,8 +47,8 @@ public class KmbankController {
         return ResponseEntity.ok(user);
     }
     @PostMapping("/user")
-    public void addUser(@RequestBody User user) {
-        userService.addUser(user);
+    public ResponseEntity<String> addUser(@RequestBody User user) {
+        return ResponseEntity.ok(userService.addUser(user));
     }
 
     @PutMapping("/user/{id}")

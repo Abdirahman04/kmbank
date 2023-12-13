@@ -14,8 +14,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void addUser(User user) {
-        userRepository.save(user);
+    public String addUser(User user) {
+        try {
+            userRepository.save(user);
+            return "User added successfully";
+        } catch (Exception e) {
+            return "Error adding user";
+        }
     }
 
     public List<User> getAllUsers() {
