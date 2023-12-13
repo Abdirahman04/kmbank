@@ -39,7 +39,7 @@ public class BasicTransactionService {
         }
     }
 
-    public List<BasicTransaction> getAllTransactions() {
+    public List<BasicTransaction> getAllBasicTransactions() {
         return basicTransactionRepository.findAll();
     }
 }

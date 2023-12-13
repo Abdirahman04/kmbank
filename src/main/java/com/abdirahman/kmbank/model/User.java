@@ -29,7 +29,7 @@ public class User {
     private Double balance;
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
-    private List<BasicTransaction> transactions;
+    private List<BasicTransaction> basicTransactions;
 
     @OneToMany(mappedBy = "senderId", cascade = CascadeType.ALL)
     private List<TransferTransaction> senderTransferTransactions;
@@ -125,12 +125,12 @@ public class User {
         this.balance = balance;
     }
 
-    public List<BasicTransaction> getTransactions() {
-        return transactions;
+    public List<BasicTransaction> getBasicTransactions() {
+        return basicTransactions;
     }
 
-    public void setTransactions(List<BasicTransaction> transactions) {
-        this.transactions = transactions;
+    public void setBasicTransactions(List<BasicTransaction> basicTransactions) {
+        this.basicTransactions = basicTransactions;
     }
 
     public List<TransferTransaction> getSenderTransferTransactions() {

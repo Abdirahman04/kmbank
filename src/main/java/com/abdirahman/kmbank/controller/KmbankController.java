@@ -7,11 +7,9 @@ import com.abdirahman.kmbank.service.BasicTransactionService;
 import com.abdirahman.kmbank.service.TransferTransactionService;
 import com.abdirahman.kmbank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -90,8 +88,8 @@ public class KmbankController {
     }
 
     @GetMapping("/basicTransaction")
-    public ResponseEntity<List<BasicTransaction>> getAllTransactions() {
-        List<BasicTransaction> basicTransactions = basicTransactionService.getAllTransactions();
+    public ResponseEntity<List<BasicTransaction>> getAllBasicTransactions() {
+        List<BasicTransaction> basicTransactions = basicTransactionService.getAllBasicTransactions();
         if (basicTransactions.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
