@@ -70,8 +70,7 @@ public class KmbankController {
 
     @DeleteMapping("/user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(userService.deleteUser(id));
     }
 
     @PostMapping("/deposit")
