@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -28,24 +29,29 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id);
+        Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.orElse(null);
+    }
+
+    public User findByAccountNumber(String accNumber) {
+        return userRepository.findByAccountNumber(accNumber).orElse(null);
     }
 
     public User updateUser(Long id, User user) {
-        User existingUser = userRepository.findById(id);
-        if (existingUser == null) {
-            return null;
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User existingUser = userOptional.get();
+            existingUser.setAccountNumber(user.getAccountNumber());
+            existingUser.setFirstName(user.getFirstName());
+            existingUser.setLastName(user.getLastName());
+            existingUser.setDob(user.getDob());
+            existingUser.setEmail(user.getEmail());
+            existingUser.setPassword(user.getPassword());
+            existingUser.setBalance(user.getBalance());
+
+            return userRepository.save(existingUser);
         }
-
-        existingUser.setAccountNumber(user.getAccountNumber());
-        existingUser.setFirstName(user.getFirstName());
-        existingUser.setLastName(user.getLastName());
-        existingUser.setDob(user.getDob());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
-        existingUser.setBalance(user.getBalance());
-
-        return userRepository.save(existingUser);
+        return null;
     }
 
     public void deleteUser(Long id) {

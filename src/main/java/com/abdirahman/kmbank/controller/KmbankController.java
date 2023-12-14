@@ -46,6 +46,13 @@ public class KmbankController {
         }
         return ResponseEntity.ok(user);
     }
+
+    @GetMapping("/user/exists/{accNumber}")
+    public boolean doesUserExist(@PathVariable Long accNumber) {
+        User user = userService.findByAccountNumber(accNumber.toString());
+        return user != null;
+    }
+
     @PostMapping("/user")
     public ResponseEntity<String> addUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.addUser(user));
@@ -72,9 +79,7 @@ public class KmbankController {
         Long id = Long.valueOf((Integer)body.get("id"));
         Double balance = Double.valueOf((Integer)body.get("balance"));
 
-        basicTransactionService.deposit(id,balance);
-
-        return  ResponseEntity.noContent().build();
+        return  ResponseEntity.ok(basicTransactionService.deposit(id,balance));
     }
 
     @PostMapping("/withdraw")
@@ -82,9 +87,7 @@ public class KmbankController {
         Long id = Long.valueOf((Integer)body.get("id"));
         Double balance = Double.valueOf((Integer)body.get("balance"));
 
-        basicTransactionService.withdraw(id,balance);
-
-        return  ResponseEntity.noContent().build();
+        return  ResponseEntity.ok(basicTransactionService.withdraw(id,balance));
     }
 
     @GetMapping("/basicTransaction")
@@ -107,8 +110,7 @@ public class KmbankController {
 
     @PostMapping("/send")
     public ResponseEntity<?> send(@RequestBody TransferTransaction transfer) {
-        transferTransactionService.send(transfer);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(transferTransactionService.send(transfer));
     }
 
     @GetMapping("/hello")
