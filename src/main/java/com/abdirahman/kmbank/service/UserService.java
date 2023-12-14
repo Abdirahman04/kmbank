@@ -18,15 +18,23 @@ public class UserService {
     private UserRepository userRepository;
 
     public String addUser(User user) {
-        if (user.getFirstName().isEmpty() || user.getFirstName() ==null) return "First name required!";
-        if (user.getLastName().isEmpty() || user.getLastName() ==null) return "Last name required!";
+        if (isStringEmpty(user.getFirstName())) return "First name required!";
+        if (isStringEmpty(user.getLastName())) return "Last name required!";
+        if (isStringEmpty(user.getAccountNumber())) return "Account number required!";
         String accountNumber = user.getAccountNumber();
         if (!isNumeric(accountNumber)) return "Account number should be a number!";
         long accNumber = Long.parseLong(accountNumber);
-        if (accNumber < 9 || accNumber > 10) return "Account Number should be 9-10 digits long!";
+        if (accNumber >= 9 && accNumber <= 10) return "Account Number should be 9-10 digits long!";
+        if (user.getDob() == null) return "Date of birth required";
         if (!isValidEmail(user.getEmail())) return "Not a valid email!";
-        userRepository.save(user);
-        return "User account created successfully";
+        if (isStringEmpty(user.getPassword())) return "Password required";
+
+        try {
+            userRepository.save(user);
+            return "User account created successfully";
+        } catch (Exception e) {
+            return "Error creating account!";
+        }
     }
 
     public List<User> getAllUsers() {
@@ -77,10 +85,14 @@ public class UserService {
         }
     }
 
-    public static boolean isValidEmail(String email) {
+    public boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(emailRegex);
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
+    }
+
+    public boolean isStringEmpty(String element) {
+        return (element == null || element.isEmpty());
     }
 }
