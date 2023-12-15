@@ -45,4 +45,17 @@ public class TransferTransactionService {
     public List<TransferTransaction> getAllTransferTransactions() {
         return transferTransactionRepository.findAll();
     }
+
+    public List<TransferTransaction> getTransferTransactionsById(Long id) {
+        Optional<List<TransferTransaction>> optionalTransferTransactions1 = transferTransactionRepository.findBySenderId(id);
+        Optional<List<TransferTransaction>> optionalTransferTransactions2 = transferTransactionRepository.findByRecipientId(id);
+
+        if (optionalTransferTransactions1.isPresent() && optionalTransferTransactions2.isPresent()) {
+            List<TransferTransaction> transferTransactions = optionalTransferTransactions1.get();
+            transferTransactions.addAll(optionalTransferTransactions2.get());
+            return transferTransactions;
+        }
+
+        else return optionalTransferTransactions1.orElseGet(() -> optionalTransferTransactions2.orElse(null));
+    }
 }

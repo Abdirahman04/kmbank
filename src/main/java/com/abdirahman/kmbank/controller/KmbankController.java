@@ -123,6 +123,15 @@ public class KmbankController {
         return ResponseEntity.ok(transferTransactions);
     }
 
+    @GetMapping("/transferTransaction/{id}")
+    public ResponseEntity<List<TransferTransaction>> getTransferTransactionById(@PathVariable Long id) {
+        List<TransferTransaction> transferTransactions = transferTransactionService.getTransferTransactionsById(id);
+        if (transferTransactions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(transferTransactions);
+    }
+
     @PostMapping("/send")
     public ResponseEntity<?> send(@RequestBody TransferTransaction transfer) {
         return ResponseEntity.ok(transferTransactionService.send(transfer));
