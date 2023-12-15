@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,5 +62,9 @@ public class BasicTransactionService {
 
     public List<BasicTransaction> getAllBasicTransactions() {
         return basicTransactionRepository.findAll();
+    }
+
+    public List<BasicTransaction> getBasicTransactionsPerId(Long id) {
+        return basicTransactionRepository.findByUserId(id).orElse(null);
     }
 }

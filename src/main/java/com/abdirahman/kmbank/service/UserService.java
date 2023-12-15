@@ -73,6 +73,11 @@ public class UserService {
         return null;
     }
 
+    public boolean login(String accNumber, String password) {
+        User user = findByAccountNumber(accNumber);
+        return (user != null && user.getPassword().equals(password));
+    }
+
     public String deleteUser(Long id) {
         userRepository.deleteById(id);
         return "User deleted successfully";

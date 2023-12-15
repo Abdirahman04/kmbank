@@ -53,6 +53,13 @@ public class KmbankController {
         return user != null;
     }
 
+    @PostMapping("/user/login")
+    public boolean login(@RequestBody Map<String, String> body) {
+        String accNumber = body.get("accountNumber");
+        String password = body.get("password");
+        return userService.login(accNumber,password);
+    }
+
     @PostMapping("/user")
     public ResponseEntity<String> addUser(@RequestBody User user) {
         return ResponseEntity.ok(userService.addUser(user));
@@ -92,6 +99,15 @@ public class KmbankController {
     @GetMapping("/basicTransaction")
     public ResponseEntity<List<BasicTransaction>> getAllBasicTransactions() {
         List<BasicTransaction> basicTransactions = basicTransactionService.getAllBasicTransactions();
+        if (basicTransactions.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(basicTransactions);
+    }
+
+    @GetMapping("/basicTransaction/{id}")
+    public ResponseEntity<List<BasicTransaction>> getBasicTransactionsById(@PathVariable Long id) {
+        List<BasicTransaction> basicTransactions = basicTransactionService.getBasicTransactionsPerId(id);
         if (basicTransactions.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
