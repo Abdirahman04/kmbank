@@ -22,11 +22,13 @@ public class UserService {
         if (isStringEmpty(user.getLastName())) return "Last name required!";
         if (isStringEmpty(user.getAccountNumber())) return "Account number required!";
         String accountNumber = user.getAccountNumber();
+        if (findByAccountNumber(accountNumber) != null) return "Account number exists!";
         if (!isNumeric(accountNumber)) return "Account number should be a number!";
         long accNumber = Long.parseLong(accountNumber);
-        if (accNumber >= 9 && accNumber <= 10) return "Account Number should be 9-10 digits long!";
+        if (accountNumber.length() < 9 || accountNumber.length() > 10) return "Account Number should be 9-10 digits long!";
         if (user.getDob() == null) return "Date of birth required";
         if (!isValidEmail(user.getEmail())) return "Not a valid email!";
+        if (findByEmail(user.getEmail()) != null) return "Email exists!";
         if (isStringEmpty(user.getPassword())) return "Password required";
 
         try {
@@ -48,6 +50,10 @@ public class UserService {
 
     public User findByAccountNumber(String accNumber) {
         return userRepository.findByAccountNumber(accNumber).orElse(null);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public User updateUser(Long id, User user) {
