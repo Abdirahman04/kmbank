@@ -27,7 +27,6 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "password", nullable = false)
-    @JsonIgnore
     private String password;
     @Column(name = "balance", nullable = false)
     private Double balance = 0.0;
