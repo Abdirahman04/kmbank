@@ -1,5 +1,6 @@
 package com.abdirahman.kmbank.service;
 
+import com.abdirahman.kmbank.exception.ApiRequestException;
 import com.abdirahman.kmbank.model.entity.BasicTransaction;
 import com.abdirahman.kmbank.model.entity.User;
 import com.abdirahman.kmbank.repository.BasicTransactionRepository;
@@ -27,7 +28,7 @@ public class BasicTransactionService {
     }
 
     public String deposit(Long id, Double balance) {
-        if (balance <= 10) return "Cannot make a deposit of less than 10";
+        if (balance <= 10) throw new ApiRequestException("Cannot make a deposit of less than 10");
 
         Optional<User> thisUserOptional = userRepository.findById(id);
         BasicTransaction transaction = new BasicTransaction(id,"deposit",balance);
@@ -40,8 +41,7 @@ public class BasicTransactionService {
             userRepository.save(thisUser);
             return "Deposit made successfully";
         }
-
-        return "User with id " + id + " does not exist!";
+        else throw new ApiRequestException("User with id " + id + " does not exist");
     }
 
     public String withdraw(Long id, Double balance) {
@@ -59,10 +59,9 @@ public class BasicTransactionService {
                 userRepository.save(thisUser);
                 return "Withdrawal made successfully";
             }
-
-            return "Not enough funds to make the transaction";
+            else throw new ApiRequestException("Not enough funds to make the transaction");
         }
-        return "User with id " + id + " does not exist!";
+        else throw new ApiRequestException("User with id " + id + " does not exist");
     }
 
     public List<BasicTransaction> getAllBasicTransactions() {

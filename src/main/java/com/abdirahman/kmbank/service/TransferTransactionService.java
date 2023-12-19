@@ -1,5 +1,6 @@
 package com.abdirahman.kmbank.service;
 
+import com.abdirahman.kmbank.exception.ApiRequestException;
 import com.abdirahman.kmbank.model.entity.TransferTransaction;
 import com.abdirahman.kmbank.model.entity.User;
 import com.abdirahman.kmbank.repository.TransferTransactionRepository;
@@ -42,11 +43,9 @@ public class TransferTransactionService {
                 transferTransactionRepository.save(transfer);
                 return "Money sent successfully";
             }
-
-            return "Not enough funds to make the transaction";
+            else throw new ApiRequestException("Not enough funds to make the transaction");
         }
-
-        return "Invalid input";
+        else throw new ApiRequestException("Invalid input");
     }
 
     public List<TransferTransaction> getAllTransferTransactions() {
