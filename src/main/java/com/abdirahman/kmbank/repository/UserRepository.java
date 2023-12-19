@@ -1,6 +1,6 @@
 package com.abdirahman.kmbank.repository;
 
-import com.abdirahman.kmbank.model.User;
+import com.abdirahman.kmbank.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

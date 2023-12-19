@@ -1,11 +1,16 @@
 package com.abdirahman.kmbank.service;
 
-import com.abdirahman.kmbank.model.User;
+import com.abdirahman.kmbank.exception.ApiRequestException;
+import com.abdirahman.kmbank.model.entity.User;
+import com.abdirahman.kmbank.model.request.UserRequestBody;
+import com.abdirahman.kmbank.model.response.UserResponseBody;
 import com.abdirahman.kmbank.repository.UserRepository;
+import com.abdirahman.kmbank.util.EntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -14,49 +19,66 @@ import java.util.regex.Pattern;
 @Service
 @Transactional
 public class UserService {
-    @Autowired
     private UserRepository userRepository;
 
-    public String addUser(User user) {
-        if (isStringEmpty(user.getFirstName())) return "First name required!";
-        if (isStringEmpty(user.getLastName())) return "Last name required!";
-        if (isStringEmpty(user.getAccountNumber())) return "Account number required!";
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public UserService() {
+    }
+
+    public String addUser(UserRequestBody userRequestBody) {
+        User user = EntityMapper.mapUserRequestBodyToUser(userRequestBody);
+
+        if (isStringEmpty(user.getFirstName())) throw new ApiRequestException("First name required");
+        if (isStringEmpty(user.getLastName())) throw new ApiRequestException("Last name required");
+        if (isStringEmpty(user.getAccountNumber())) throw new ApiRequestException("Account number required");
         String accountNumber = user.getAccountNumber();
-        if (findByAccountNumber(accountNumber) != null) return "Account number exists!";
-        if (!isNumeric(accountNumber)) return "Account number should be a number!";
+        if (findByAccountNumber(accountNumber) != null) throw new ApiRequestException("Account number exists");
+        if (!isNumeric(accountNumber)) throw new ApiRequestException("Account number should be a number");
         long accNumber = Long.parseLong(accountNumber);
-        if (accountNumber.length() < 9 || accountNumber.length() > 10) return "Account Number should be 9-10 digits long!";
-        if (user.getDob() == null) return "Date of birth required";
-        if (!isValidEmail(user.getEmail())) return "Not a valid email!";
-        if (findByEmail(user.getEmail()) != null) return "Email exists!";
-        if (isStringEmpty(user.getPassword())) return "Password required";
+        if (accountNumber.length() < 9 || accountNumber.length() > 10) throw new ApiRequestException("Account Number should be 9-10 digits long");
+        if (user.getDob() == null) throw new ApiRequestException("Date of birth required");
+        if (!isValidEmail(user.getEmail())) throw new ApiRequestException("Not a valid email");
+        if (findByEmail(user.getEmail()) != null) throw new ApiRequestException("Email exists");
+        if (isStringEmpty(user.getPassword())) throw new ApiRequestException("Password required");
 
         try {
             userRepository.save(user);
             return "User account created successfully";
         } catch (Exception e) {
-            return "Error creating account!";
+            throw new RuntimeException("Error creating account", e);
         }
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponseBody> getAllUsers() {
+        List<User> userList =  userRepository.findAll();
+        List<UserResponseBody> userResponseBodyList = new ArrayList<>();
+        for (User user : userList) {
+            userResponseBodyList.add(EntityMapper.mapUserToUserResponseBody(user));
+        }
+        return userResponseBodyList;
     }
 
-    public User findById(Long id) {
+    public UserResponseBody findById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.orElse(null);
+        if (userOptional.isEmpty()) throw new ApiRequestException("No user with id { " + id + " } found");
+        return EntityMapper.mapUserToUserResponseBody(userOptional.get());
     }
 
-    public User findByAccountNumber(String accNumber) {
-        return userRepository.findByAccountNumber(accNumber).orElse(null);
+    public UserResponseBody findByAccountNumber(String accNumber) {
+        Optional<User> userOptional = userRepository.findByAccountNumber(accNumber);
+        if (userOptional.isEmpty()) throw new ApiRequestException("No user with account number {" + accNumber + "}");
+        return EntityMapper.mapUserToUserResponseBody(userOptional.get());
     }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
     }
 
-    public User updateUser(Long id, User user) {
+    public UserResponseBody updateUser(Long id, User user) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             User existingUser = userOptional.get();
@@ -66,15 +88,16 @@ public class UserService {
             existingUser.setDob(user.getDob());
             existingUser.setEmail(user.getEmail());
             existingUser.setPassword(user.getPassword());
-            existingUser.setBalance(user.getBalance());
 
-            return userRepository.save(existingUser);
+            User user1 =  userRepository.save(existingUser);
+            return EntityMapper.mapUserToUserResponseBody(user1);
         }
-        return null;
+        else throw new ApiRequestException("User with id { " + id + " } does not exist");
     }
 
     public boolean login(String accNumber, String password) {
-        User user = findByAccountNumber(accNumber);
+        Optional<User> userOptional = userRepository.findByAccountNumber(accNumber);
+        User user = userOptional.orElse(null);
         return (user != null && user.getPassword().equals(password));
     }
 

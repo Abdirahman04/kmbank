@@ -1,6 +1,6 @@
 package com.abdirahman.kmbank.repository;
 
-import com.abdirahman.kmbank.model.TransferTransaction;
+import com.abdirahman.kmbank.model.entity.TransferTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

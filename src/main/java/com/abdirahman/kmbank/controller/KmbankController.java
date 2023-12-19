@@ -1,12 +1,16 @@
 package com.abdirahman.kmbank.controller;
 
-import com.abdirahman.kmbank.model.BasicTransaction;
-import com.abdirahman.kmbank.model.TransferTransaction;
-import com.abdirahman.kmbank.model.User;
+import com.abdirahman.kmbank.model.entity.BasicTransaction;
+import com.abdirahman.kmbank.model.entity.TransferTransaction;
+import com.abdirahman.kmbank.model.entity.User;
+import com.abdirahman.kmbank.model.request.UserRequestBody;
+import com.abdirahman.kmbank.model.response.UserResponseBody;
 import com.abdirahman.kmbank.service.BasicTransactionService;
 import com.abdirahman.kmbank.service.TransferTransactionService;
 import com.abdirahman.kmbank.service.UserService;
+import com.abdirahman.kmbank.util.EntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,22 +20,23 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1")
 public class KmbankController {
-    @Autowired
     private UserService userService;
-
-    @Autowired
     private BasicTransactionService basicTransactionService;
-
-    @Autowired
     private TransferTransactionService transferTransactionService;
 
-    public KmbankController(UserService userService) {
+    public KmbankController() {
+    }
+
+    @Autowired
+    public KmbankController(UserService userService, BasicTransactionService basicTransactionService, TransferTransactionService transferTransactionService) {
         this.userService = userService;
+        this.basicTransactionService = basicTransactionService;
+        this.transferTransactionService = transferTransactionService;
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<User>> getUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserResponseBody>> getUsers() {
+        List<UserResponseBody> users = userService.getAllUsers();
         if (users.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -39,18 +44,15 @@ public class KmbankController {
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        User user = userService.findById(id);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserResponseBody> getUserById(@PathVariable Long id) {
+        UserResponseBody user = userService.findById(id);
+        return new ResponseEntity<>(user, HttpStatusCode.valueOf(200));
     }
 
-    @GetMapping("/user/exists/{accNumber}")
-    public boolean doesUserExist(@PathVariable Long accNumber) {
-        User user = userService.findByAccountNumber(accNumber.toString());
-        return user != null;
+    @GetMapping("user/account/{accountNumber}")
+    public ResponseEntity<UserResponseBody> getUserByAccountNumber(@PathVariable Long accountNumber) {
+        UserResponseBody user = userService.findByAccountNumber(accountNumber.toString());
+        return new ResponseEntity<>(user, HttpStatusCode.valueOf(200));
     }
 
     @PostMapping("/user/login")
@@ -61,14 +63,14 @@ public class KmbankController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<String> addUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.addUser(user));
+    public ResponseEntity<String> addUser(@RequestBody UserRequestBody userRequestBody) {
+        return ResponseEntity.ok(userService.addUser(userRequestBody));
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<UserResponseBody> updateUser(@PathVariable Long id, @RequestBody User user) {
 
-        User updatedUser = userService.updateUser(id, user);
+        UserResponseBody updatedUser = userService.updateUser(id, user);
         if (updatedUser == null) {
             return ResponseEntity.notFound().build();
         }

@@ -1,5 +1,8 @@
-package com.abdirahman.kmbank.model;
+package com.abdirahman.kmbank.model.entity;
 
+import com.abdirahman.kmbank.model.entity.BasicTransaction;
+import com.abdirahman.kmbank.model.entity.TransferTransaction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -24,41 +27,33 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     private String password;
     @Column(name = "balance", nullable = false)
-    private Double balance;
+    private Double balance = 0.0;
 
     @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<BasicTransaction> basicTransactions;
 
     @OneToMany(mappedBy = "senderId", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<TransferTransaction> senderTransferTransactions;
 
     @OneToMany(mappedBy = "recipientId", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<TransferTransaction> recipientTransferTransactions;
 
     public User() {
     }
 
-    public User(long id, String accountNumber, String firstName, String lastName, Date dob, String email, String password, Double balance) {
-        this.id = id;
+    public User(String accountNumber, String firstName, String lastName, Date dob, String email, String password) {
         this.accountNumber = accountNumber;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dob = dob;
         this.email = email;
         this.password = password;
-        this.balance = balance;
-    }
-
-    public User(String accountNumber, String firstName, String lastName, Date dob, String email, String password, Double balance) {
-        this.accountNumber = accountNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.dob = dob;
-        this.email = email;
-        this.password = password;
-        this.balance = balance;
     }
 
     public long getId() {

@@ -1,7 +1,7 @@
 package com.abdirahman.kmbank.service;
 
-import com.abdirahman.kmbank.model.TransferTransaction;
-import com.abdirahman.kmbank.model.User;
+import com.abdirahman.kmbank.model.entity.TransferTransaction;
+import com.abdirahman.kmbank.model.entity.User;
 import com.abdirahman.kmbank.repository.TransferTransactionRepository;
 import com.abdirahman.kmbank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,17 @@ import java.util.Optional;
 @Service
 @Transactional
 public class TransferTransactionService {
-    @Autowired
     TransferTransactionRepository transferTransactionRepository;
-    @Autowired
     UserRepository userRepository;
+
+    public TransferTransactionService() {
+    }
+
+    @Autowired
+    public TransferTransactionService(TransferTransactionRepository transferTransactionRepository, UserRepository userRepository) {
+        this.transferTransactionRepository = transferTransactionRepository;
+        this.userRepository = userRepository;
+    }
 
     public String send(TransferTransaction transfer) {
         Optional<User> senderOptional = userRepository.findById(transfer.getSenderId());

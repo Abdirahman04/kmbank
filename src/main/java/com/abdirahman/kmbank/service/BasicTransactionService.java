@@ -1,25 +1,30 @@
 package com.abdirahman.kmbank.service;
 
-import com.abdirahman.kmbank.model.BasicTransaction;
-import com.abdirahman.kmbank.model.User;
+import com.abdirahman.kmbank.model.entity.BasicTransaction;
+import com.abdirahman.kmbank.model.entity.User;
 import com.abdirahman.kmbank.repository.BasicTransactionRepository;
 import com.abdirahman.kmbank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class BasicTransactionService {
-    @Autowired
     BasicTransactionRepository basicTransactionRepository;
+    UserRepository userRepository;
+
+    public BasicTransactionService() {
+    }
 
     @Autowired
-    UserRepository userRepository;
+    public BasicTransactionService(BasicTransactionRepository basicTransactionRepository, UserRepository userRepository) {
+        this.basicTransactionRepository = basicTransactionRepository;
+        this.userRepository = userRepository;
+    }
 
     public String deposit(Long id, Double balance) {
         if (balance <= 10) return "Cannot make a deposit of less than 10";

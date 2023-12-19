@@ -1,4 +1,4 @@
-package com.abdirahman.kmbank.model;
+package com.abdirahman.kmbank.model.entity;
 
 import jakarta.persistence.*;
 
