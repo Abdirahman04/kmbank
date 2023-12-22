@@ -3,6 +3,7 @@ package com.abdirahman.kmbank.controller;
 import com.abdirahman.kmbank.model.entity.BasicTransaction;
 import com.abdirahman.kmbank.model.entity.TransferTransaction;
 import com.abdirahman.kmbank.model.entity.User;
+import com.abdirahman.kmbank.model.request.BasicTransactionRequestBody;
 import com.abdirahman.kmbank.model.request.UserRequestBody;
 import com.abdirahman.kmbank.model.response.UserResponseBody;
 import com.abdirahman.kmbank.service.BasicTransactionService;
@@ -83,19 +84,13 @@ public class KmbankController {
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<?> deposit(@RequestBody Map<String,Object> body) {
-        Long id = Long.valueOf((Integer)body.get("id"));
-        Double balance = Double.valueOf((Integer)body.get("balance"));
-
-        return  ResponseEntity.ok(basicTransactionService.deposit(id,balance));
+    public ResponseEntity<?> deposit(@RequestBody BasicTransactionRequestBody body) {
+        return  ResponseEntity.ok(basicTransactionService.deposit(body.id(), body.balance()));
     }
 
     @PostMapping("/withdraw")
-    public ResponseEntity<?> withdraw(@RequestBody Map<String,Object> body) {
-        Long id = Long.valueOf((Integer)body.get("id"));
-        Double balance = Double.valueOf((Integer)body.get("balance"));
-
-        return  ResponseEntity.ok(basicTransactionService.withdraw(id,balance));
+    public ResponseEntity<?> withdraw(@RequestBody BasicTransactionRequestBody body) {
+        return  ResponseEntity.ok(basicTransactionService.withdraw(body.id(), body.balance()));
     }
 
     @GetMapping("/basicTransaction")

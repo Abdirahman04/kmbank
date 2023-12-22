@@ -36,13 +36,13 @@ public class UserService {
         if (isStringEmpty(user.getLastName())) throw new ApiRequestException("Last name required");
         if (isStringEmpty(user.getAccountNumber())) throw new ApiRequestException("Account number required");
         String accountNumber = user.getAccountNumber();
-        if (findByAccountNumber(accountNumber) != null) throw new ApiRequestException("Account number exists");
+        if (userRepository.findByAccountNumber(accountNumber).isPresent()) throw new ApiRequestException("Account number exists");
         if (!isNumeric(accountNumber)) throw new ApiRequestException("Account number should be a number");
         long accNumber = Long.parseLong(accountNumber);
         if (accountNumber.length() < 9 || accountNumber.length() > 10) throw new ApiRequestException("Account Number should be 9-10 digits long");
         if (user.getDob() == null) throw new ApiRequestException("Date of birth required");
         if (!isValidEmail(user.getEmail())) throw new ApiRequestException("Not a valid email");
-        if (findByEmail(user.getEmail()) != null) throw new ApiRequestException("Email exists");
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) throw new ApiRequestException("Email exists");
         if (isStringEmpty(user.getPassword())) throw new ApiRequestException("Password required");
 
         try {
