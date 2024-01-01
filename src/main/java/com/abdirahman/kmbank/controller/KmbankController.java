@@ -38,15 +38,26 @@ public class KmbankController {
     @GetMapping("/user")
     public ResponseEntity<List<UserResponseBody>> getUsers() {
         List<UserResponseBody> users = userService.getAllUsers();
-        if (users.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(users);
+        if (users.isEmpty()) return ResponseEntity.noContent().build();
+        else return ResponseEntity.ok(users);
+    }
+
+    @GetMapping("/user/raw")
+    public ResponseEntity<List<User>> getRawUsers() {
+        List<User> users = userService.getAllUsersRaw();
+        if (users.isEmpty()) return ResponseEntity.noContent().build();
+        else return ResponseEntity.ok(users);
     }
 
     @GetMapping("/user/{id}")
     public ResponseEntity<UserResponseBody> getUserById(@PathVariable Long id) {
         UserResponseBody user = userService.findById(id);
+        return new ResponseEntity<>(user, HttpStatusCode.valueOf(200));
+    }
+
+    @GetMapping("/user/raw/{accountNumber}")
+    public ResponseEntity<User> getUserByIdRaw(@PathVariable Long accountNumber) {
+        User user = userService.findByIdRaw(accountNumber.toString());
         return new ResponseEntity<>(user, HttpStatusCode.valueOf(200));
     }
 

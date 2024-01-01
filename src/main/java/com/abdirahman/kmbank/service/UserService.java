@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,10 +63,20 @@ public class UserService {
         return userResponseBodyList;
     }
 
+    public List<User> getAllUsersRaw() {
+        return userRepository.findAll();
+    }
+
     public UserResponseBody findById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()) throw new ApiRequestException("No user with id { " + id + " } found");
         return EntityMapper.mapUserToUserResponseBody(userOptional.get());
+    }
+
+    public User findByIdRaw(String accNumber) {
+        Optional<User> userOptional = userRepository.findByAccountNumber(accNumber);
+        if (userOptional.isEmpty()) throw new ApiRequestException("No user with account number { " + accNumber + " } found");
+        else return userOptional.get();
     }
 
     public UserResponseBody findByAccountNumber(String accNumber) {
