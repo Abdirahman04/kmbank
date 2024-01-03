@@ -1,13 +1,8 @@
 package com.abdirahman.kmbank.controller;
 
-import com.abdirahman.kmbank.model.entity.BasicTransaction;
-import com.abdirahman.kmbank.model.entity.TransferTransaction;
 import com.abdirahman.kmbank.model.entity.User;
-import com.abdirahman.kmbank.model.request.BasicTransactionRequestBody;
 import com.abdirahman.kmbank.model.request.UserRequestBody;
 import com.abdirahman.kmbank.model.response.UserResponseBody;
-import com.abdirahman.kmbank.service.BasicTransactionService;
-import com.abdirahman.kmbank.service.TransferTransactionService;
 import com.abdirahman.kmbank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
@@ -21,17 +16,13 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class UserController {
     private UserService userService;
-    private BasicTransactionService basicTransactionService;
-    private TransferTransactionService transferTransactionService;
 
     public UserController() {
     }
 
     @Autowired
-    public UserController(UserService userService, BasicTransactionService basicTransactionService, TransferTransactionService transferTransactionService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.basicTransactionService = basicTransactionService;
-        this.transferTransactionService = transferTransactionService;
     }
 
     @GetMapping("/user")
@@ -93,32 +84,4 @@ public class UserController {
         return ResponseEntity.ok(userService.deleteUser(id));
     }
 
-    @GetMapping("/transferTransaction")
-    public ResponseEntity<List<TransferTransaction>> getAllTransferTransactions() {
-        List<TransferTransaction> transferTransactions = transferTransactionService.getAllTransferTransactions();
-        if (transferTransactions.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(transferTransactions);
-    }
-
-    @GetMapping("/transferTransaction/{id}")
-    public ResponseEntity<List<TransferTransaction>> getTransferTransactionById(@PathVariable Long id) {
-        List<TransferTransaction> transferTransactions = transferTransactionService.getTransferTransactionsById(id);
-        if (transferTransactions.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(transferTransactions);
-    }
-
-    @PostMapping("/send")
-    public ResponseEntity<?> send(@RequestBody TransferTransaction transfer) {
-        return ResponseEntity.ok(transferTransactionService.send(transfer));
-    }
-
-    @GetMapping("/hello")
-    @ResponseBody
-    public String hello() {
-        return userService.hello();
-    }
 }
