@@ -9,7 +9,6 @@ import com.abdirahman.kmbank.model.response.UserResponseBody;
 import com.abdirahman.kmbank.service.BasicTransactionService;
 import com.abdirahman.kmbank.service.TransferTransactionService;
 import com.abdirahman.kmbank.service.UserService;
-import com.abdirahman.kmbank.util.EntityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -20,16 +19,16 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-public class KmbankController {
+public class UserController {
     private UserService userService;
     private BasicTransactionService basicTransactionService;
     private TransferTransactionService transferTransactionService;
 
-    public KmbankController() {
+    public UserController() {
     }
 
     @Autowired
-    public KmbankController(UserService userService, BasicTransactionService basicTransactionService, TransferTransactionService transferTransactionService) {
+    public UserController(UserService userService, BasicTransactionService basicTransactionService, TransferTransactionService transferTransactionService) {
         this.userService = userService;
         this.basicTransactionService = basicTransactionService;
         this.transferTransactionService = transferTransactionService;
