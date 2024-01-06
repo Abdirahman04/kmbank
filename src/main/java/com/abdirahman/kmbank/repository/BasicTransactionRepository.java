@@ -10,8 +10,6 @@ import java.util.Optional;
 
 public interface BasicTransactionRepository extends JpaRepository<BasicTransaction, Long> {
     Optional<List<BasicTransaction>> findByUserId(Long userId);
-    @Query("SELECT COUNT(e) FROM basic_transactions")
-    Long countAllBasicTransactions();
-    @Query("SELECT COUNT(e) FROM basic_transactions e WHERE e.transaction_type = :transaction")
-    Long countTransactions(@Param("someValue") String transaction);
+    Long countBy();
+    Long countByTransactionType(String transactionType);
 }

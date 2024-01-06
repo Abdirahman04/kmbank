@@ -28,23 +28,23 @@ public class DataAccessService {
     }
 
     public long countUsers() {
-        return userRepository.countAllUsers();
+        return userRepository.countBy();
     }
 
     public long countTypeBasicTransactions(String transaction) {
-        return basicTransactionRepository.countTransactions(transaction);
+        return basicTransactionRepository.countByTransactionType(transaction);
     }
 
     public long countBasicTransactions() {
-        return basicTransactionRepository.countAllBasicTransactions();
+        return basicTransactionRepository.countBy();
     }
 
     public long countTransferTransactions() {
-        return transferTransactionRepository.countAllTransferTransactions();
+        return transferTransactionRepository.countBy();
     }
 
     public String getTotalBalance() {
-        double amount = userRepository.getTotalOfBalance();
+        double amount = userRepository.sumBalance();
         return NumberFormat.getCurrencyInstance().format(amount);
     }
 

@@ -11,6 +11,5 @@ public interface TransferTransactionRepository extends JpaRepository<TransferTra
     Optional<List<TransferTransaction>> findBySenderId(Long senderId);
     Optional<List<TransferTransaction>> findByRecipientId(Long recipientId);
 
-    @Query("SELECT COUNT(e) FROM transfer_transactions")
-    Long countAllTransferTransactions();
+    Long countBy();
 }
